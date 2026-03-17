@@ -7,9 +7,12 @@ const phoneInput = document.getElementById("phone");
 const contactsBody = document.getElementById("contacts-body");
 const cancelEditButton = document.getElementById("cancel-edit");
 
+let contactsCache = [];
+
 async function loadContacts() {
   const response = await fetch("/api/contacts");
   const contacts = await response.json();
+  contactsCache = contacts;
 
   contactsBody.innerHTML = "";
 
@@ -17,12 +20,12 @@ async function loadContacts() {
     const row = document.createElement("tr");
 
     row.innerHTML = `
-      <td>${contact.firstName} ${contact.lastName}</td>
-      <td>${contact.email || ""}</td>
-      <td>${contact.phone || ""}</td>
+      <td>${contact.FirstName} ${contact.LastName}</td>
+      <td>${contact.Email || ""}</td>
+      <td>${contact.Phone || ""}</td>
       <td>
-        <button onclick="editContact(${contact.id})">Edit</button>
-        <button onclick="deleteContact(${contact.id})">Delete</button>
+        <button onclick="editContact(${contact.Id})">Edit</button>
+        <button onclick="deleteContact(${contact.Id})">Delete</button>
       </td>
     `;
 
@@ -56,21 +59,19 @@ form.addEventListener("submit", async (event) => {
   }
 
   resetForm();
-  loadContacts();
+  await loadContacts();
 });
 
-async function editContact(id) {
-  const response = await fetch("/api/contacts");
-  const contacts = await response.json();
-  const contact = contacts.find((c) => c.id === id);
+function editContact(id) {
+  const contact = contactsCache.find((c) => c.Id === id);
 
   if (!contact) return;
 
-  contactIdInput.value = contact.id;
-  firstNameInput.value = contact.firstName;
-  lastNameInput.value = contact.lastName;
-  emailInput.value = contact.email || "";
-  phoneInput.value = contact.phone || "";
+  contactIdInput.value = contact.Id;
+  firstNameInput.value = contact.FirstName;
+  lastNameInput.value = contact.LastName;
+  emailInput.value = contact.Email || "";
+  phoneInput.value = contact.Phone || "";
 }
 
 async function deleteContact(id) {
@@ -78,7 +79,7 @@ async function deleteContact(id) {
     method: "DELETE",
   });
 
-  loadContacts();
+  await loadContacts();
 }
 
 function resetForm() {
