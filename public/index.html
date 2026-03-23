@@ -3,57 +3,65 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SIMPLECONTACTMANAGER</title>
+  <title>Simple Contact Manager</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="container">
-    <h1>SIMPLECONTACTMANAGER</h1>
+  <header>
+    <span class="header-title">Simple Contact Manager</span>
+  </header>
 
-    <form id="contact-form">
-      <input type="hidden" id="contact-id" />
+  <main class="container">
+    <section class="card">
+      <h2 id="form-title">Add Contact</h2>
+      <form id="contact-form">
+        <input type="hidden" id="contact-id" />
 
-      <div class="form-row">
-        <label for="firstName">First Name</label>
-        <input id="firstName" type="text" required />
-      </div>
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="firstName">First Name <span class="required">*</span></label>
+            <input id="firstName" type="text" placeholder="Jane" required />
+          </div>
+          <div class="form-field">
+            <label for="lastName">Last Name <span class="required">*</span></label>
+            <input id="lastName" type="text" placeholder="Smith" required />
+          </div>
+          <div class="form-field">
+            <label for="email">Email</label>
+            <input id="email" type="email" placeholder="jane@example.com" />
+          </div>
+          <div class="form-field">
+            <label for="phone">Phone</label>
+            <input id="phone" type="text" placeholder="+1 (555) 000-0000" />
+          </div>
+        </div>
 
-      <div class="form-row">
-        <label for="lastName">Last Name</label>
-        <input id="lastName" type="text" required />
-      </div>
+        <div class="button-row">
+          <button type="submit" id="submit-btn" class="btn btn-primary">Save Contact</button>
+          <button type="button" id="cancel-edit" class="btn btn-secondary">Cancel</button>
+        </div>
+      </form>
+    </section>
 
-      <div class="form-row">
-        <label for="email">Email</label>
-        <input id="email" type="email" />
-      </div>
-
-      <div class="form-row">
-        <label for="phone">Phone</label>
-        <input id="phone" type="text" />
-      </div>
-
-      <div class="button-row">
-        <button type="submit">Save Contact</button>
-        <button type="button" id="cancel-edit">Cancel</button>
-      </div>
-    </form>
-
-    <hr />
-
-    <h2>Contacts</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Phone</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody id="contacts-body"></tbody>
-    </table>
-  </div>
+    <section class="card">
+      <h2>Contacts</h2>
+      <p id="empty-state" class="empty-state" hidden>No contacts yet. Add one above.</p>
+      <table id="contacts-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="contacts-body"></tbody>
+      </table>
+    </section>
+  </main>
 
   <script src="app.js"></script>
 </body>
