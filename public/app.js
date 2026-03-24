@@ -1,3 +1,13 @@
+// Wrapper around fetch that redirects to /login on 401
+async function apiFetch(url, options) {
+  const res = await fetch(url, options);
+  if (res.status === 401) {
+    window.location.href = "/login";
+    return null;
+  }
+  return res;
+}
+
 const form          = document.getElementById("contact-form");
 const contactIdInput = document.getElementById("contact-id");
 const firstNameInput = document.getElementById("firstName");
@@ -14,7 +24,8 @@ const contactsTable  = document.getElementById("contacts-table");
 let contactsCache = [];
 
 async function loadContacts() {
-  const response = await fetch("/api/contacts");
+  const response = await apiFetch("/api/contacts");
+  if (!response) return;
   const contacts = await response.json();
   contactsCache = contacts;
 
@@ -54,13 +65,13 @@ form.addEventListener("submit", async (event) => {
   };
 
   if (id) {
-    await fetch(`/api/contacts/${id}`, {
+    await apiFetch(`/api/contacts/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
   } else {
-    await fetch("/api/contacts", {
+    await apiFetch("/api/contacts", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
@@ -87,7 +98,7 @@ function editContact(id) {
 }
 
 async function deleteContact(id) {
-  await fetch(`/api/contacts/${id}`, { method: "DELETE" });
+  await apiFetch(`/api/contacts/${id}`, { method: "DELETE" });
   await loadContacts();
 }
 

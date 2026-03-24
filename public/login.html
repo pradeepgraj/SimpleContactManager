@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login — Simple Contact Manager</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* Centre the login card vertically on the page */
+    body { display: flex; flex-direction: column; min-height: 100vh; }
+    .login-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .login-card {
+      width: 100%;
+      max-width: 360px;
+    }
+    .error-msg {
+      color: var(--danger);
+      font-size: 13px;
+      margin-top: 12px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <span class="header-title">Simple Contact Manager</span>
+  </header>
+
+  <div class="login-wrap">
+    <div class="card login-card">
+      <h2>Sign in</h2>
+      <form id="login-form">
+        <div class="form-field" style="margin-bottom: 16px;">
+          <label for="username">Username</label>
+          <input id="username" type="text" autocomplete="username" required />
+        </div>
+        <div class="form-field">
+          <label for="password">Password</label>
+          <input id="password" type="password" autocomplete="current-password" required />
+        </div>
+        <p id="error-msg" class="error-msg"></p>
+        <div class="button-row">
+          <button type="submit" class="btn btn-primary" style="width: 100%;">Sign in</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("login-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const errorMsg = document.getElementById("error-msg");
+      errorMsg.style.display = "none";
+
+      const res = await fetch("/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: document.getElementById("username").value,
+          password: document.getElementById("password").value,
+        }),
+      });
+
+      if (res.ok) {
+        window.location.href = "/";
+      } else {
+        const data = await res.json();
+        errorMsg.textContent = data.error || "Login failed";
+        errorMsg.style.display = "block";
+      }
+    });
+  </script>
+</body>
+</html>
